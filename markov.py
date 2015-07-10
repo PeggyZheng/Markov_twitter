@@ -1,4 +1,6 @@
 import sys
+import os
+import twitter
 from random import choice
 
 
@@ -61,4 +63,28 @@ if __name__ == "__main__":
 
     generator = MarkovMachine()
     generator.read_files(filenames)
+    tweet = generator.make_text()
     print generator.make_text()
+
+"""Notes about adding Twitter functionality
+
+status = api.PostUpdate(variable for markov return goes here)
+print status.text
+"""
+api = twitter.Api(
+    consumer_key = os.environ["TWITTER_CONSUMER_KEY"],
+    consumer_secret = os.environ["TWITTER_CONSUMER_SECRET"],
+    access_token_key = os.environ["TWITTER_ACCESS_TOKEN_KEY"],
+    access_token_secret = os.environ["TWITTER_ACCESS_TOKEN_SECRET"]
+    )
+
+def tweet():
+    while True:
+        answer = raw_input("Enter to tweet again [q to quit] > ")
+        if answer == "q":
+            break
+        else:
+            tweet = generator.make_text()
+            status = api.PostUpdate(tweet)
+            print status.text
+tweet()
